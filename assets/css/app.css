@@ -2,8 +2,63 @@
 
 @import "~milligram/dist/milligram";
 
-.column > p {
+/* .column > p {
     padding-top: 10ex;
     text-align: center;
+} */
+body {
+    background-color: #FFFFCC;
+}
+
+h1 {
+    color:  #333300;
+    text-align:center;
+    font-size: 40px;
+}
+
+table, th, td, tbody {
+    border: none;
+    width:500px;
+    margin:auto;
+    text-align:center;
+    border-collapse: collapse;
+    border-spacing:0px;
+}
+
+.letter {
+    margin-right: 5px;
+    background-color: #666633;
+    border: 2px solid #CCCC33;
+
+    color: white;
+    display: inline-block;
+    text-align:center;
+    font-size: 16px;
+    width: 80px;
+    height: 40px;
+}
+
+.resstart_btn {
+    
+    margin-left:auto;
+    margin-right:auto;
+    text-align:center;
+}
+.restart {
+    background-color: #CCCC66;
+    border: 2px solid #666633;
+    width:200px;
+    height: 80px;
+    font-size: 20px;
+}
+
+.message {
+    font-size: 30px;
+    color: #FF9900;
+
+    margin-left:auto;
+    margin-right:auto;
+    margin-top: 40px;
+    text-align:center;
 }
 
