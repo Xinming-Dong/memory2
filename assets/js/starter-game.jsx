@@ -169,15 +169,22 @@ function Message(params) {
 
   let is_playing = <p>Playing...</p>
   let won = <p>You Won!</p>
+  // score = 1600 / num_click (maximum 100)
+  let score = <p>Your score is: {Math.ceil(1600 / root.state.num_click)}</p>
   
   if(playing) {
     return (
       <div>{is_playing}</div>
+      
     );
   }
   else {
     return (
-      <div>{won}</div>
+      <div>
+        <div>{won}</div>
+        <div>{score}</div>
+      </div>
+      
     );
   }
 }
