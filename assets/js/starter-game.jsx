@@ -14,70 +14,71 @@ class Starter extends React.Component {
       table_contents: ["A", "B", "C", "D", "E", "F", "G", "H", "A", "B", "C", "D", "E", "F", "G", "H"],
       completed: [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
       show: [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
-      last: -1
+      last: -1,
+      button_disabled: false,
     };
   }
 
   show(index) {
     let new_show = this.state.show;
     new_show[index] = true;
-    let st = _.assign({}, this.state, { show: new_show });
-    this.setState(st)
+    this.setState(function(state, props) {
+      return {
+        show: new_show
+      }
+    });
   }
 
   click_letter_react(index) {
-    if(!this.state.completed[index]){
+    if((!this.state.completed[index])&&(!this.state.button_disabled)&&(index != this.state.last)){
       // show the content
       this.show(index);
-      
-      let new_show = this.state.show;
-      let new_click = this.state.num_click + 1;
       let new_completed = this.state.completed;
-      let new_last = index;
+      this.setState((state, props) => ({num_click: state.num_click + 1}));
 
-      console.log("check last 1");
-      console.log(this.state.last);
-      if(new_click % 2 === 1) { // if num_click is odd
+      
+      if((this.state.num_click % 2 === 0)) { // if num_click is odd
+        
         // update state.last
-        //new_last = index;
+        let new_last = index;
+        this.setState({
+          last: new_last,
+        }, () => {
+          console.log("user click");
+        })
       }
       
       else { // if num_click is even
         // compare with state.last, if the same
         if (this.state.table_contents[index] == this.state.table_contents[this.state.last]) {
           // tag completed
-          console.log("completing first");
-          console.log(index);
           new_completed[index] = true;
-          console.log("completing second");
-          console.log(this.state.last);
           new_completed[this.state.last] = true;
+          this.setState({
+            completed: new_completed,
+          })
         }
         
         else { // if different
-          // wait for 10s?????
           // update show
-          // setTimeout(
-          //   function() {
-          //     console.log("check last 4")
-          //     console.log(this.state.last)
+          this.setState((state, props) => ({button_disabled: true}));
+          setTimeout(
+            function() {
+              let new_show = this.state.show;
 
-          //     new_show[index] = false;
-          //     console.log("tagging first")
-          //     console.log(index)
+              new_show[this.state.last] = false; 
 
-          //     new_show[this.state.last] = false; 
-          //     console.log("tagging second")
-          //     console.log(this.state.last)
-          //     let st1 = _.assign({}, this.state, { show: new_show });
-          //     this.setState(st1)
-          //   }.bind(this), 1000);
-          new_show[this.state.last] = false;
-          new_show[index] = false;
+              new_show[index] = false;
+
+              this.setState(function(state, props) {
+                return {
+                  show: new_show,
+                  button_disabled: false
+                }
+              });
+            }.bind(this), 5000);
         }
       }
-      let st2 = _.assign({}, this.state, {show: new_show, num_click: new_click, completed: new_completed, last: new_last});
-      this.setState(st2);
     }
   }
 
@@ -85,7 +86,7 @@ class Starter extends React.Component {
     return this.state.completed.some(s => s == false);
   }
 
-  restart() {
+  shuffle() {
     let content = ["A", "B", "C", "D", "E", "F", "G", "H", "A", "B", "C", "D", "E", "F", "G", "H"];
     let result = [];
     let random;
@@ -94,60 +95,58 @@ class Starter extends React.Component {
       result.push(content[random]);
       content.splice(random, 1);
     }
+    return result;
+  }
 
-    let new_num_click = 0;
-    let new_completed = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
-    let new_show = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
-    let new_last = -1;
+  restart() {
+    if(!this.state.button_disabled) {
+      let result = this.shuffle();
 
-    this.setState({
-      table_contents: result,
-      num_click: new_num_click, 
-      completed: new_completed, 
-      show: new_show, 
-      last: new_last,
-    }, () => {
-      this.reminder();
-    });
+      let new_num_click = 0;
+      let new_completed = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
+      let new_show = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
+      let new_last = -1;
+
+      this.setState({
+        table_contents: result,
+        num_click: new_num_click, 
+        completed: new_completed, 
+        show: new_show, 
+        last: new_last,
+      }, () => {
+        this.reminder();
+      });
+    }
   }
 
   reminder() {
-    console.log(this.state.table_contents);
+    console.log("new game");
+  }
+
+  create_table() {
+    let table = [];
+    let k = 0;
+    for(let i = 0; i < 4; i ++) {
+      let row = [];
+      for(let j = 0;j < 4; j ++) {
+        row.push(
+            <button key={k} className="letter" onClick={this.click_letter_react.bind(this, k)}>{this.state.show[k]? this.state.table_contents[k]:""}</button> 
+        )
+        k ++;
+      }
+    table.push(<tr key={i}><td>{row}</td></tr>);
+    }
+    return table;
   }
 
   render() {
     return (
       <div>
-        {/* <div className="title">
-          <h1>MEMORY GAME</h1>
-        <div/> */}
         <h1>MEMORY GAME</h1>
+
         <table>
           <tbody>
-            <tr><td>
-              <button className="letter" onClick={this.click_letter_react.bind(this, 0)}>{this.state.show[0]? this.state.table_contents[0]:""}</button>
-              <button className="letter" onClick={this.click_letter_react.bind(this, 1)}>{this.state.show[1]? this.state.table_contents[1]:""}</button>
-              <button className="letter" onClick={this.click_letter_react.bind(this, 2)}>{this.state.show[2]? this.state.table_contents[2]:""}</button>
-              <button className="letter" onClick={this.click_letter_react.bind(this, 3)}>{this.state.show[3]? this.state.table_contents[3]:""}</button>
-            </td></tr>
-            <tr><td>
-              <button className="letter" onClick={this.click_letter_react.bind(this, 4)}>{this.state.show[4]? this.state.table_contents[4]:""}</button>
-              <button className="letter" onClick={this.click_letter_react.bind(this, 5)}>{this.state.show[5]? this.state.table_contents[5]:""}</button>
-              <button className="letter" onClick={this.click_letter_react.bind(this, 6)}>{this.state.show[6]? this.state.table_contents[6]:""}</button>
-              <button className="letter" onClick={this.click_letter_react.bind(this, 7)}>{this.state.show[7]? this.state.table_contents[7]:""}</button>
-            </td></tr>
-            <tr><td>
-             <button className="letter" onClick={this.click_letter_react.bind(this, 8)}>{this.state.show[8]? this.state.table_contents[8]:""}</button>
-             <button className="letter" onClick={this.click_letter_react.bind(this, 9)}>{this.state.show[9]? this.state.table_contents[9]:""}</button>
-             <button className="letter" onClick={this.click_letter_react.bind(this, 10)}>{this.state.show[10]? this.state.table_contents[10]:""}</button>
-              <button className="letter" onClick={this.click_letter_react.bind(this, 11)}>{this.state.show[11]? this.state.table_contents[11]:""}</button>
-           </td></tr>
-           <tr><td>
-             <button className="letter" onClick={this.click_letter_react.bind(this, 12)}>{this.state.show[12]? this.state.table_contents[12]:""}</button>
-             <button className="letter" onClick={this.click_letter_react.bind(this, 13)}>{this.state.show[13]? this.state.table_contents[13]:""}</button>
-             <button className="letter" onClick={this.click_letter_react.bind(this, 14)}>{this.state.show[14]? this.state.table_contents[14]:""}</button>
-             <button className="letter" onClick={this.click_letter_react.bind(this, 15)}>{this.state.show[15]? this.state.table_contents[15]:""}</button>
-           </td></tr>
+            {this.create_table()}
           </tbody>
         </table>
 
