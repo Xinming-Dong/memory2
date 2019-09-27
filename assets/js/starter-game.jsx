@@ -76,7 +76,7 @@ class Starter extends React.Component {
                   button_disabled: false
                 }
               });
-            }.bind(this), 5000);
+            }.bind(this), 1000);
         }
       }
     }
