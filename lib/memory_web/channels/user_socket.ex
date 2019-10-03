@@ -2,7 +2,8 @@ defmodule MemoryWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "room:*", MemoryWeb.RoomChannel
+  ## CHANNEL: add chanel
+  channel "games:*", MemoryWeb.GamesChannel
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After
@@ -15,6 +16,10 @@ defmodule MemoryWeb.UserSocket do
   #
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
+
+  # CHANNEL
+  # connect/3 - receives the socket params, connection info if any, 
+  # and authenticates the connection.
   def connect(_params, socket, _connect_info) do
     {:ok, socket}
   end
@@ -29,5 +34,10 @@ defmodule MemoryWeb.UserSocket do
   #     MemoryWeb.Endpoint.broadcast("user_socket:#{user.id}", "disconnect", %{})
   #
   # Returning `nil` makes this socket anonymous.
+
+  # CHANNEL
+  # The id is used to identify socket connections, 
+  # often to a particular user, allowing us to force disconnections. 
+  # For sockets requiring no authentication, nil can be returned
   def id(_socket), do: nil
 end
