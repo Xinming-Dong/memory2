@@ -4,7 +4,7 @@ server {
 
     # TODO: This should be your server name.
     # CHANGE: my server name.
-    server_name memory1.elephantdong.com;
+    server_name memory2.elephantdong.com;
 
     location / {
         proxy_pass http://localhost:4791;

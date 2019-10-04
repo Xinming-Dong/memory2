@@ -59,13 +59,11 @@ defmodule Memory.Game do
     def on_click_letter(game, index) do
         # clicking letter buttons
         n = game.num_click
-        IO.inspect n
         cpl = game.completed
 
         n = n + 1
         cpl = List.replace_at(cpl, index, 1)
 
-        IO.inspect n
         # odd number of clicks
         if rem(n, 2) == 1 do
             IO.puts "odd"
@@ -100,8 +98,6 @@ defmodule Memory.Game do
     def do_match?(game, index) do
         one = Enum.at(game.content, game.first)
         two = Enum.at(game.content, index)
-        IO.inspect one
-        IO.inspect two
         if one == two do
             true
         else

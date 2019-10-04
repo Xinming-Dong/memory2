@@ -33,7 +33,6 @@ class Starter extends React.Component {
     if((this.state.display[index] == " ") && !this.state.btn_disabled) {
       this.channel.push("click_letter", {button_index: index})
                   .receive("ok", this.got_view.bind(this));
-                // console.log(this.state.btn_disabled);
       
       this.channel.push("clr", {})
                   .receive("ok", this.got_view.bind(this));
@@ -54,7 +53,6 @@ class Starter extends React.Component {
       let row = [];
       for(let j = 0;j < 4; j ++) {
         row.push(
-            // <button key={k} className="letter" onClick={this.click_letter_react.bind(this, k)}>{this.state.display[k]}</button> 
             <button key={k} className="letter" onClick={this.click_letter_react.bind(this, k)}>{this.state.display[k]}</button> 
         )
         k ++;

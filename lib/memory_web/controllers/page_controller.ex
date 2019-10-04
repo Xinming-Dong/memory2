@@ -6,6 +6,7 @@ defmodule MemoryWeb.PageController do
   end
 
   def game(conn, %{"name" => name}) do
+    # name = User.changeset(%User{})
     render conn, "game.html", name: name
   end
 end
