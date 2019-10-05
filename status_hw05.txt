@@ -23,8 +23,7 @@ Yes, it is.
 
 
 5. Is your game properly deployed? If not, what went wrong?
-No, it isn't.
-
+Yes, it is.
 
 
 
